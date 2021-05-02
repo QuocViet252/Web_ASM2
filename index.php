@@ -77,7 +77,7 @@
             }
             
         }
-        $sql = "SELECT * FROM `product` ORDER BY `id`";
+        $sql = "SELECT * FROM `product` WHERE typeProduct = '1'";
 
         //Chạy câu SQL
         $result = $con->query($sql);
@@ -104,7 +104,33 @@
                 <a class="button" href="#">Buy Now</a>
             </figure>';
         }
-        
+        $sqli = "SELECT * FROM `product` WHERE typeProduct = '2'";
+
+        //Chạy câu SQL
+        $result = $con->query($sqli);
+        //thu var_dump($result)
+        //if co data thi num_rows > 0, num_rows =0
+
+
+        $data = [];
+        if ($result->num_rows > 0) {
+
+            //Gắn dữ liệu lấy được vào mảng $data
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+        }
+
+        $food = '';
+        foreach ($data as $value) {
+            $food .= '
+            <figure>
+                <img src="images/'.$value['Images'].'">
+                <figcaption>'.$value['name'].'</figcaption>
+                <span class="price">$'.$value['price'].'</span>
+                <a class="button" href="#">Buy Now</a>
+            </figure>';
+        }
 
         
 
@@ -193,64 +219,9 @@
             <div id="columns" class="columns_4">
 
             
-                <figure>
-                    <img src="images/nuocdao.jpg">
-                    <figcaption>Lemon</figcaption>
-                    <span class="price">$44</span>
-                    <a class="button" href="#">Buy Now</a>
-                </figure>
-                
-                <figure>
-                    <img src="images/nuocdao.jpg">
-                    <figcaption>Juice</figcaption>
-                    <span class="price">$44</span>
-                    <a class="button" href="#">Buy Now</a>
-                </figure>
-                
-                <figure>
-                    <img src="images/nuocdao.jpg">
-                    <figcaption>Black Dots</figcaption>
-                    <span class="price">$44</span>
-                    <a class="button" href="#">Buy Now</a>
-                </figure>
-              
-                <figure>
-                    <img src="images/nuocdao.jpg">
-                    <figcaption>Red Flowy</figcaption>
-                    <span class="price">$44</span>
-                    <a class="button" href="#">Buy Now</a>
-                </figure>
-                
-                <figure>
-                    <img src="images/nuocdao.jpg">
-                    <figcaption>Yellow Button-Up</figcaption>
-                    <span class="price">$44</span>
-                    <a class="button" href="#">Buy Now</a>
-                </figure>
-                <figure>
-                    <img src="images/nuocdao.jpg">
-                    <figcaption>Yellow Button-Up</figcaption>
-                    <span class="price">$44</span>
-                    <a class="button" href="#">Buy Now</a>
-                </figure>
-                <figure>
-                    <img src="images/nuocdao.jpg">
-                    <figcaption>Yellow Button-Up</figcaption>
-                    <span class="price">$44</span>
-                    <a class="button" href="#">Buy Now</a>
-                </figure>
-                <figure>
-                    <img src="images/nuocdao.jpg">
-                    <figcaption>Yellow Button-Up</figcaption>
-                    <span class="price">$44</span>
-                    <a class="button" href="#">Buy Now</a>
-                </figure>
-                <figure>
-                    <img src="images/nuocdao.jpg">
-                    <figcaption>Yellow Button-Up</figcaption>
-                    <span class="price">$44</span>
-                    <a class="button" href="#">Buy Now</a>
-                </figure>
+                <?php
+                    echo $food;
+                ?>
                 
                 
 

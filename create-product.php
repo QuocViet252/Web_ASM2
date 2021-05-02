@@ -34,7 +34,7 @@
                     
                    
                     
-                    $sql = "INSERT INTO product (name , price,images) VALUES ('$nameProduct' , '$price' ,'$img')";
+                    $sql = "INSERT INTO product (name , price,images,typeProduct) VALUES ('$nameProduct' , '$price' ,'$img','1')";
                     if ($result = $con->query($sql)){
                         move_uploaded_file($_FILES['avatar']['tmp_name'], './images/'.$_FILES['avatar']['name']);
                         echo "You have successfully product";
@@ -48,7 +48,39 @@
 
             
         }
-        $sql = "SELECT * FROM `product` ORDER BY `id`";
+        if(isset($_POST['createFood'])){
+            
+            
+            $nameProduct = $_POST['nameFood'];
+            $price = $_POST['price'];
+            
+            if (isset($_FILES['avatar']))
+            {
+                $img = $_FILES['avatar']['name'];
+               
+                if ($_FILES['avatar']['error'] > 0)
+                {
+                    echo 'File Upload Bị Lỗi';
+                }
+                else{
+                    
+                   
+                    
+                    $sql = "INSERT INTO product (name , price,images,typeProduct) VALUES ('$nameProduct' , '$price' ,'$img','2')";
+                    if ($result = $con->query($sql)){
+                        move_uploaded_file($_FILES['avatar']['tmp_name'], './images/'.$_FILES['avatar']['name']);
+                        echo "You have successfully food";
+      
+                    }
+                }
+                
+            }
+            
+            
+
+            
+        }
+        $sql = "SELECT * FROM `product` WHERE typeProduct = '1'";
 
         //Chạy câu SQL
         $result = $con->query($sql);
@@ -65,9 +97,44 @@
             }
         }
 
-        $product = '';
+        $drink = '';
         foreach ($data as $value) {
-            $product .= '
+            $drink .= '
+            <tr>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Price</th>
+
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td>'.$value['name'].'</td>
+                <td class="imgTable"><img src="images/'.$value['Images'].'"></td>
+                <td>$'.$value['price'].'</td>
+                <td><a href="deleteMyProduct.php?id='.$value['id'].'"><i style="color:red" class="material-icons">delete_forever</i></a></td>
+                
+            </tr>';
+        }
+        $sqli = "SELECT * FROM `product` WHERE typeProduct = '2'";
+
+        //Chạy câu SQL
+        $result = $con->query($sqli);
+        //thu var_dump($result)
+        //if co data thi num_rows > 0, num_rows =0
+
+
+        $data = [];
+        if ($result->num_rows > 0) {
+
+            //Gắn dữ liệu lấy được vào mảng $data
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+        }
+
+        $food = '';
+        foreach ($data as $value) {
+            $food .= '
             <tr>
                 <th>Name</th>
                 <th>Image</th>
@@ -151,7 +218,7 @@
             <table class ="tableProduct">
                 
                 <?php
-                    echo $product;
+                    echo $drink;
                 ?>
                 
 
@@ -189,7 +256,52 @@
                 </div>
             </form>
         </div>
-        
+        <div class="aCreateProduct">
+            <h2><a onclick="document.getElementById('id02').style.display='block'" style="width:auto;">Create Food</a></h2>
+            
+        </div>
+        <div id="wrap">
+            <table class ="tableProduct">
+                
+                <?php
+                    echo $food;
+                ?>
+                
+
+                
+            </table>
+        </div>
+        <div id="id02" class="modal">
+  
+            <form class="modal-content animate"  method="post" enctype="multipart/form-data">
+                <div class="imgcontainer">
+                    <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+                    <img src="images/sliceimg2.jpg" alt="Avatar" class="avatar">
+                </div>
+
+                <div class="containerModal">
+                    <label for="name"><b>Name Food</b></label>
+                        <input type="text" placeholder="Enter Name Food" name="nameFood" required>
+
+                    
+                    <label for="price"><b>Price Food</b></label>
+                        <input type="text" placeholder="Enter Price Food" name="price" required>    
+                    <label for="avatar"><b>Images</b></label>
+                        <input type="file"  name="avatar" required>
+                    <button name="createFood" type="submit">Create</button>
+                    <label>
+                        
+                        <input type="checkbox" checked="checked" name="rememberSignIn"> Accpect Create Drink
+                    </label>
+                    
+                </div>
+
+                <div class="containerModal" style="background-color:white">
+                    <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+                    
+                </div>
+            </form>
+        </div>
         <!-- Update Modal -->
         
 
